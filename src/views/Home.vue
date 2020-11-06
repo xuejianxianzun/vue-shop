@@ -2,7 +2,7 @@
   <div class="home">
     home
     <br />
-    <el-button>bbbbbbbbbb</el-button>
+    <el-button @click="logout">logout</el-button>
   </div>
 </template>
 
@@ -12,5 +12,10 @@ import { Component, Vue } from 'vue-property-decorator'
 @Component({
   components: {}
 })
-export default class Home extends Vue {}
+export default class Home extends Vue {
+  logout() {
+    window.sessionStorage.removeItem(process.env.VUE_APP_TOKEN_STORE)
+    this.$router.push('/login')
+  }
+}
 </script>

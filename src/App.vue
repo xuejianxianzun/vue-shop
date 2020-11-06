@@ -1,7 +1,12 @@
 <template>
   <div id="app">
-    <AppAside></AppAside>
-    <AppMain></AppMain>
+    <el-container>
+      <el-header></el-header>
+      <el-aside></el-aside>
+      <el-main>
+        <router-view></router-view>
+      </el-main>
+    </el-container>
   </div>
 </template>
 
@@ -20,6 +25,6 @@ export default class App extends Vue {}
 </script>
 <style lang="less" scoped>
 #app {
-  display: flex;
+  min-height: 100vh;
 }
 </style>
