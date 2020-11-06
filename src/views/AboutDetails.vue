@@ -1,8 +1,6 @@
 <template>
-  <div class="home">
-    home
-    <br />
-    <el-button>bbbbbbbbbb</el-button>
+  <div class="about">
+    {{$route.params.id}}
   </div>
 </template>
 
@@ -12,5 +10,5 @@ import { Component, Vue } from 'vue-property-decorator'
 @Component({
   components: {}
 })
-export default class Home extends Vue {}
+export default class AboutDetails extends Vue {}
 </script>
