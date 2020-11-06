@@ -1,8 +1,16 @@
 <template>
-  <div class="home">
-    home
-    <br />
-    <el-button @click="logout">logout</el-button>
+  <div class="homeWrap">
+    <el-container>
+      <el-header></el-header>
+      <el-container>
+        <el-aside width="260px"></el-aside>
+        <el-main>
+          <br />
+          <el-button @click="logout">logout</el-button>
+          <router-view></router-view>
+        </el-main>
+      </el-container>
+    </el-container>
   </div>
 </template>
 
@@ -19,3 +27,22 @@ export default class Home extends Vue {
   }
 }
 </script>
+
+<style lang="less" scoped>
+.homeWrap {
+  height: 100%;
+  .el-container {
+    height: 100%;
+    .el-header {
+      background: #363d40;
+    }
+    .el-aside {
+      background: #343c4b;
+      height: 100%;
+    }
+    .el-main {
+      height: 100%;
+    }
+  }
+}
+</style>

@@ -75,7 +75,7 @@ export default class Login extends Vue {
           data.data.token
         )
         this.$router.push({
-          path: '/home'
+          path: '/'
         })
       } else {
         if (data.meta.msg) {

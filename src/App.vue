@@ -1,12 +1,6 @@
 <template>
   <div id="app">
-    <el-container>
-      <el-header></el-header>
-      <el-aside></el-aside>
-      <el-main>
-        <router-view></router-view>
-      </el-main>
-    </el-container>
+    <router-view></router-view>
   </div>
 </template>
 
@@ -23,8 +17,8 @@ import AppMain from '@/components/AppMain.vue'
 })
 export default class App extends Vue {}
 </script>
-<style lang="less" scoped>
+<style lang="less">
 #app {
-  min-height: 100vh;
+  height: 100%;
 }
 </style>
