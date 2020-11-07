@@ -10,10 +10,17 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  if (to.path !== '/login' && window.sessionStorage.getItem(process.env.VUE_APP_TOKEN_STORE) === null) {
+  const token = window.sessionStorage.getItem('token')
+  if (to.path !== '/login' && !token) {
     next('/login')
   } else {
     next()
+  }
+})
+
+router.afterEach((to, from) => {
+  if (to.meta.title) {
+    document.title = to.meta.title
   }
 })
 

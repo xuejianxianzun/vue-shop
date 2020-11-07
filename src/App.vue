@@ -6,15 +6,8 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
-import AppAside from '@/components/AppAside.vue'
-import AppMain from '@/components/AppMain.vue'
 
-@Component({
-  components: {
-    AppAside,
-    AppMain
-  }
-})
+@Component
 export default class App extends Vue {}
 </script>
 <style lang="less">

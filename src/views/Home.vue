@@ -1,12 +1,13 @@
 <template>
   <div class="homeWrap">
     <el-container>
-      <el-header></el-header>
+      <el-header>
+        <AppHeader></AppHeader>
+      </el-header>
       <el-container>
-        <el-aside width="260px"></el-aside>
+        <el-aside> <AppAside></AppAside> </el-aside>
         <el-main>
-          <br />
-          <el-button @click="logout">logout</el-button>
+          <Breadcrumb v-if="$route.path !== '/'" class="breadcrumbComponent"></Breadcrumb>
           <router-view></router-view>
         </el-main>
       </el-container>
@@ -16,16 +17,18 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
+import AppHeader from '@/components/AppHeader.vue'
+const AppAside = () => import('@/components/AppAside.vue')
+const Breadcrumb = () => import('@/components/Breadcrumb.vue')
 
 @Component({
-  components: {}
-})
-export default class Home extends Vue {
-  logout() {
-    window.sessionStorage.removeItem(process.env.VUE_APP_TOKEN_STORE)
-    this.$router.push('/login')
+  components: {
+    AppHeader,
+    AppAside,
+    Breadcrumb
   }
-}
+})
+export default class Home extends Vue {}
 </script>
 
 <style lang="less" scoped>
@@ -39,10 +42,15 @@ export default class Home extends Vue {
     .el-aside {
       background: #343c4b;
       height: 100%;
+      width: auto !important;
     }
     .el-main {
+      background: #EAEDF1;
       height: 100%;
     }
   }
+}
+.breadcrumbComponent{
+  margin-bottom: 15px;
 }
 </style>

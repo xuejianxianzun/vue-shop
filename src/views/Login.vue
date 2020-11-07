@@ -10,6 +10,7 @@
             <el-input
               v-model="formData.username"
               prefix-icon="iconfont icon-user"
+              @keydown.native.enter="submit"
             ></el-input>
           </el-form-item>
           <el-form-item prop="password">
@@ -17,6 +18,7 @@
               v-model="formData.password"
               type="password"
               prefix-icon="iconfont icon-3702mima"
+              @keydown.native.enter="submit"
             ></el-input>
           </el-form-item>
           <el-form-item class="btnsWrap">
@@ -31,6 +33,7 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
+import * as type from '../store/type'
 
 @Component({
   components: {}
@@ -70,10 +73,8 @@ export default class Login extends Vue {
       const { data } = await this.axios.post('login', this.formData)
       if (data.meta.status === 200) {
         this.$message.success('登录成功')
-        window.sessionStorage.setItem(
-          process.env.VUE_APP_TOKEN_STORE,
-          data.data.token
-        )
+        this.$store.commit(type.setToken, data.data.token)
+        window.sessionStorage.setItem('token', data.data.token)
         this.$router.push({
           path: '/'
         })

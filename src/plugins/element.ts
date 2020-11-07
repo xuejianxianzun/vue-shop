@@ -8,7 +8,22 @@ import {
   Form,
   FormItem,
   Input,
-  Icon
+  Icon,
+  Menu,
+  MenuItem,
+  MenuItemGroup,
+  Submenu,
+  Breadcrumb,
+  BreadcrumbItem,
+  Card,
+  Row,
+  Col,
+  Table,
+  TableColumn,
+  Switch,
+  Tooltip,
+  Pagination,
+  Dialog
 } from 'element-ui'
 
 vue.use(Button)
@@ -20,3 +35,18 @@ vue.use(Aside)
 vue.use(Input)
 vue.use(Main)
 vue.use(Icon)
+vue.use(Menu)
+vue.use(MenuItem)
+vue.use(MenuItemGroup)
+vue.use(Submenu)
+vue.use(Breadcrumb)
+vue.use(BreadcrumbItem)
+vue.use(Card)
+vue.use(Row)
+vue.use(Col)
+vue.use(Table)
+vue.use(TableColumn)
+vue.use(Switch)
+vue.use(Tooltip)
+vue.use(Pagination)
+vue.use(Dialog)

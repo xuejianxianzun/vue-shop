@@ -15,6 +15,30 @@ Vue.prototype.$message = Message
 axios.defaults.baseURL = process.env.VUE_APP_API_URL
 Vue.config.productionTip = false
 
+axios.interceptors.request.use(
+  config => {
+    const token = window.sessionStorage.getItem('token') || store.state.token
+    config.headers.Authorization = token
+    return config
+  },
+  err => {
+    return Promise.reject(err)
+  }
+)
+
+axios.interceptors.response.use(
+  response => {
+    // 对错误的状态码给出提示
+    if (response?.data?.meta.status === 400) {
+      console.error(response.config.baseURL)
+    }
+    return response
+  },
+  err => {
+    return Promise.reject(err.response)
+  }
+)
+
 new Vue({
   router,
   store,
