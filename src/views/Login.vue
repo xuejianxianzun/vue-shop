@@ -75,9 +75,7 @@ export default class Login extends Vue {
         this.$message.success('登录成功')
         this.$store.commit(type.setToken, data.data.token)
         window.sessionStorage.setItem('token', data.data.token)
-        this.$router.push({
-          path: '/'
-        })
+        location.href = '/'
       } else {
         if (data.meta.msg) {
           this.$message.error(data.meta.msg)
