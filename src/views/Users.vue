@@ -63,7 +63,7 @@
                     type="primary"
                     icon="el-icon-edit"
                     size="small"
-                    @click.native="editUser(scope.row.id)"
+                    @click.native="editUser(scope.row)"
                   ></el-button>
                 </el-tooltip>
                 <el-tooltip
@@ -72,12 +72,13 @@
                   content="删除"
                   placement="top"
                   :enterable="false"
+                  :hide-after="3000"
                 >
                   <el-button
                     type="danger"
                     icon="el-icon-delete"
                     size="small"
-                    @click.native="editUser(scope.row.id)"
+                    @click.native="delUserConfirm(scope.row)"
                   ></el-button>
                 </el-tooltip>
                 <el-tooltip
@@ -91,7 +92,7 @@
                     type="warning"
                     icon="el-icon-setting"
                     size="small"
-                    @click.native="editUser(scope.row.id)"
+                    @click.native="assignRole(scope.row)"
                   ></el-button>
                 </el-tooltip>
               </template>
@@ -113,7 +114,7 @@
       </div>
     </el-card>
 
-    <!-- 添加用户的弹出层 -->
+    <!-- 添加用户的对话框 -->
     <el-dialog
       class="addUserDialog"
       title="添加用户"
@@ -149,11 +150,88 @@
         <el-button type="primary" @click="addUserFormSubmit">确 定</el-button>
       </span>
     </el-dialog>
+
+    <!-- 修改用户的对话框 -->
+    <el-dialog
+      class="editUserDialog"
+      title="修改用户信息"
+      width="30%"
+      :visible.sync="dialogVisible2"
+      @close="resetEditUserForm"
+    >
+      <div class="editUserFormWrap">
+        <el-form
+          label-width="80px"
+          :model="editUserData"
+          :rules="editUserRules"
+          ref="editUserForm"
+          status-icon
+          @keydown.native.enter="editUserFormSubmit"
+        >
+          <el-form-item label="用户名" required>
+            <el-input v-model="editUserData.username" disabled></el-input>
+          </el-form-item>
+          <el-form-item label="邮箱" prop="email" required>
+            <el-input v-model="editUserData.email"></el-input>
+          </el-form-item>
+          <el-form-item label="手机号码" prop="mobile" required>
+            <el-input v-model="editUserData.mobile"></el-input>
+          </el-form-item>
+        </el-form>
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="showDialog3 = false">取 消</el-button>
+        <el-button type="primary" @click="editUserFormSubmit">确 定</el-button>
+      </span>
+    </el-dialog>
+
+    <!-- 分配用户角色的对话框 -->
+    <el-dialog
+      class="editUserDialog"
+      title="分配角色"
+      width="30%"
+      :visible.sync="showDialog3"
+    >
+      <div class="editUserFormWrap">
+        <div class="roleInfo">
+          <p>当前用户名：{{ assignRoleData.username }}</p>
+          <p>用户角色：{{ assignRoleData.role_name }}</p>
+        </div>
+        <el-select v-model="roleValue" placeholder="请选择用户角色">
+          <el-option
+            v-for="item in roleList"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          >
+          </el-option>
+        </el-select>
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="showDialog3 = false">取 消</el-button>
+        <el-button type="primary" @click="assignRoleSubmit">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
+
+type UserData = {
+  create_time: number
+  email: string
+  id: number
+  mg_state: boolean
+  mobile: string
+  role_name: string
+  username: string
+}
+type UserList = {
+  pagenum: number
+  total: number
+  users: UserData[]
+}
 
 @Component({
   components: {}
@@ -163,35 +241,41 @@ export default class Users extends Vue {
   pagenum = 1
   pagesize = 10
 
-  dialogVisible = false
+  // 获取用户数据
+  usersData: UserList | {} = {}
 
-  addUserData = {
-    username: '',
-    password: '',
-    email: '',
-    mobile: ''
+  created() {
+    this.getUserList()
   }
 
-  addUserRules = {
-    username: [
-      { required: true, message: '请输入用户名', trigger: 'blur' },
-      { min: 3, max: 10, message: '长度在 3 到 10 个字符', trigger: 'blur' }
-    ],
-    password: [
-      { required: true, message: '请输入密码', trigger: 'blur' },
-      { min: 6, max: 20, message: '长度在 6 到 20 个字符', trigger: 'blur' }
-    ],
-    email: [
-      { required: true, message: '请输入邮箱', trigger: 'blur' },
-      { min: 6, max: 30, message: '长度在 6 到 30 个字符', trigger: 'blur' },
-      { validator: this.validateEmail, trigger: 'blur' }
-    ],
-    mobile: [
-      { required: true, message: '请输入手机号', trigger: 'blur' },
-      { min: 11, max: 15, message: '手机号最低为 11 位', trigger: 'blur' },
-      { validator: this.checkPhone, trigger: 'blur' }
-    ]
+  async getUserList() {
+    const { data: res } = await this.axios.get('users', {
+      params: {
+        query: this.query,
+        pagenum: this.pagenum,
+        pagesize: this.pagesize
+      }
+    })
+
+    if (res.meta.status !== 200) {
+      return this.$message.error('获取用户列表失败')
+    }
+
+    this.usersData = Object.assign({}, res.data)
   }
+
+  // 校验规则
+  checkEmailCfg = [
+    { required: true, message: '请输入邮箱', trigger: 'blur' },
+    { min: 6, max: 30, message: '长度在 6 到 30 个字符', trigger: 'blur' },
+    { validator: this.validateEmail, trigger: 'blur' }
+  ]
+
+  checkMobileCfg = [
+    { required: true, message: '请输入手机号', trigger: 'blur' },
+    { min: 11, max: 15, message: '手机号最低为 11 位', trigger: 'blur' },
+    { validator: this.checkPhone, trigger: 'blur' }
+  ]
 
   validateEmail(rule, value, callback) {
     const mailReg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/
@@ -227,46 +311,7 @@ export default class Users extends Vue {
     }, 100)
   }
 
-  usersData:
-    | {
-        pagenum: number
-        total: number
-        users: {
-          create_time: number
-          email: string
-          id: number
-          mg_state: boolean
-          mobile: string
-          role_name: string
-          username: string
-        }[]
-      }
-    | {} = {}
-
-  created() {
-    this.getUserList()
-  }
-
-  async getUserList() {
-    const { data: res } = await this.axios.get('users', {
-      params: {
-        query: this.query,
-        pagenum: this.pagenum,
-        pagesize: this.pagesize
-      }
-    })
-
-    if (res.meta.status !== 200) {
-      return this.$message.error('获取用户列表失败')
-    }
-
-    this.usersData = Object.assign({}, res.data)
-  }
-
-  editUser(id: number) {
-    console.log(id)
-  }
-
+  // 页码事件
   handleSizeChange(val: number) {
     this.pagesize = val
     this.getUserList()
@@ -277,8 +322,8 @@ export default class Users extends Vue {
     this.getUserList()
   }
 
+  // 修改用户状态
   async userStateChange(data) {
-    console.log(data)
     const { data: res } = await this.axios.put(
       `users/${data.id}/state/${data.mg_state}`
     )
@@ -289,6 +334,29 @@ export default class Users extends Vue {
       // eslint-disable-next-line @typescript-eslint/camelcase
       data.mg_state = !data.mg_state
     }
+  }
+
+  // 添加用户开始
+  dialogVisible = false
+
+  addUserData = {
+    username: '',
+    password: '',
+    email: '',
+    mobile: ''
+  }
+
+  addUserRules = {
+    username: [
+      { required: true, message: '请输入用户名', trigger: 'blur' },
+      { min: 3, max: 10, message: '长度在 3 到 10 个字符', trigger: 'blur' }
+    ],
+    password: [
+      { required: true, message: '请输入密码', trigger: 'blur' },
+      { min: 6, max: 20, message: '长度在 6 到 20 个字符', trigger: 'blur' }
+    ],
+    email: this.checkEmailCfg,
+    mobile: this.checkMobileCfg
   }
 
   resetAddUserForm() {
@@ -325,6 +393,125 @@ export default class Users extends Vue {
 
     this.getUserList()
   }
+
+  // 修改用户开始
+
+  dialogVisible2 = false
+
+  editUserData = {}
+
+  editUserRules = {
+    email: this.checkEmailCfg,
+    mobile: this.checkMobileCfg
+  }
+
+  async editUser(userData: UserData) {
+    const { data: res } = await this.axios.get('users/' + userData.id)
+    if (res.meta.status !== 200) {
+      return this.$message.error('获取用户信息失败 ' + res.meta.msg)
+    }
+
+    this.editUserData = Object.assign({}, res.data)
+    this.dialogVisible2 = true
+  }
+
+  resetEditUserForm() {
+    this.$refs.editUserForm.resetFields()
+  }
+
+  editUserFormCancel() {
+    this.resetEditUserForm()
+    this.dialogVisible2 = false
+  }
+
+  editUserFormSubmit() {
+    this.$refs.editUserForm.validate((valid) => {
+      if (valid) {
+        this.edit()
+      } else {
+        this.$message.error('表单内容不正确')
+        return false
+      }
+    })
+  }
+
+  async edit() {
+    const data = this.editUserData as any
+    const { data: res } = await this.axios.put('users/' + data.id, {
+      email: data.email,
+      mobile: data.mobile
+    })
+
+    if (res.meta.status !== 200) {
+      return this.$message.error('修改用户失败 ' + res.meta.msg)
+    }
+
+    this.$message.success('修改用户成功')
+
+    this.editUserFormCancel()
+
+    this.getUserList()
+  }
+
+  // 删除角色
+  delUserConfirm(userData: UserData) {
+    this.$messageBox
+      .confirm('是否要删除此用户？', '删除用户', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+      .then(() => {
+        this.delUser(userData)
+      })
+      .catch((err) => err)
+  }
+
+  async delUser(userData: UserData) {
+    const { data: res } = await this.axios.delete(`users/${userData.id}`)
+    if (res.meta.status === 200) {
+      this.$message.success('删除成功')
+      this.getUserList()
+    } else {
+      this.$message.error('删除失败')
+    }
+  }
+
+  // 分配角色
+  showDialog3 = false
+  assignRoleData = {}
+  roleValue = ''
+  readonly roleList: {
+    value: string
+    lable: string
+  }[] = [
+    {
+      value: '1',
+      lable: '11'
+    },
+    {
+      value: '2',
+      lable: '22'
+    }
+  ]
+
+  assignRole(userData: UserData) {
+    this.assignRoleData = Object.assign({}, userData)
+    this.showDialog3 = true
+  }
+
+  async assignRoleSubmit() {
+    const { data: res } = await this.axios.put(`users/${this.assignRoleData.id}/role`, {
+      rid: this.roleValue
+    })
+    if (res.meta.status === 200) {
+      this.$message.success('分配角色成功')
+      this.showDialog3 = false
+      this.getUserList()
+    } else {
+      this.$message.error('分配角色失败 ' + res.meta.msg)
+    }
+  }
 }
 </script>
 
@@ -349,6 +536,10 @@ export default class Users extends Vue {
 }
 .addUserDialog {
   width: 100%;
+}
+.roleInfo{
+  margin-bottom: 10px;
+  line-height: 30px;
 }
 </style>
 <style lang="less">
