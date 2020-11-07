@@ -20,6 +20,20 @@ const routes: Array<RouteConfig> = [
           }
         ]
       }
+    },
+    {
+      path: '/rights',
+      name: 'rights',
+      component: () => import('@/views/Rights.vue'),
+      meta: {
+        title: '权限管理',
+        breadcrumb: [
+          {
+            title: '权限管理',
+            path: '/rights'
+          }
+        ]
+      }
     }]
   },
   {

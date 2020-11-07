@@ -3,7 +3,7 @@
     <el-card class="box-card">
       <div class="searchWrap">
         <el-row :gutter="20">
-          <el-col :span="6">
+          <el-col :span="6" class="inputArea">
             <el-input
               placeholder="请输入用户名"
               v-model="query"
@@ -501,9 +501,12 @@ export default class Users extends Vue {
   }
 
   async assignRoleSubmit() {
-    const { data: res } = await this.axios.put(`users/${this.assignRoleData.id}/role`, {
-      rid: this.roleValue
-    })
+    const { data: res } = await this.axios.put(
+      `users/${this.assignRoleData.id}/role`,
+      {
+        rid: this.roleValue
+      }
+    )
     if (res.meta.status === 200) {
       this.$message.success('分配角色成功')
       this.showDialog3 = false
@@ -516,12 +519,12 @@ export default class Users extends Vue {
 </script>
 
 <style lang="less" scoped>
-.el-card {
-  box-shadow: 0 1px 1px #ccc;
-}
 .searchWrap {
   .el-input {
     margin-right: 14px;
+  }
+  .inputArea {
+    min-width: 300px;
   }
 }
 .userListWrap {
@@ -537,7 +540,7 @@ export default class Users extends Vue {
 .addUserDialog {
   width: 100%;
 }
-.roleInfo{
+.roleInfo {
   margin-bottom: 10px;
   line-height: 30px;
 }
