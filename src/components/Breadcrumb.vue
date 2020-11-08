@@ -2,8 +2,11 @@
   <div class="breadcrumbWrap">
     <el-breadcrumb separator-class="el-icon-arrow-right">
       <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-      <el-breadcrumb-item v-for="data in breadcrumbData" :key="data.path">
-        <router-link :to="data.path" class="link">{{ data.title }}</router-link>
+      <el-breadcrumb-item
+        v-for="data in breadcrumbData"
+        :key="data.path"
+      >
+        {{ data.title }}
       </el-breadcrumb-item>
     </el-breadcrumb>
   </div>
@@ -23,7 +26,7 @@ export default class Breadcrumb extends Vue {
 .link {
   cursor: pointer !important;
   &:hover {
-    color: #409EFF!important;
+    color: #409eff !important;
   }
 }
 </style>

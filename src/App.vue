@@ -13,5 +13,6 @@ export default class App extends Vue {}
 <style lang="less">
 #app {
   height: 100%;
+  min-width: 1300px;
 }
 </style>

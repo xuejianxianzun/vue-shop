@@ -201,8 +201,8 @@
           <el-option
             v-for="item in roleList"
             :key="item.value"
-            :label="item.label"
-            :value="item.value"
+            :label="item.roleName"
+            :value="item.id"
           >
           </el-option>
         </el-select>
@@ -481,26 +481,23 @@ export default class Users extends Vue {
   showDialog3 = false
   assignRoleData = {}
   roleValue = ''
-  readonly roleList: {
-    value: string
-    lable: string
-  }[] = [
-    {
-      value: '1',
-      lable: '11'
-    },
-    {
-      value: '2',
-      lable: '22'
-    }
-  ]
+  roleList = []
 
-  assignRole(userData: UserData) {
+  async assignRole(userData) {
+    const { data: res } = await this.axios.get('roles')
+    if (res.meta.status !== 200) {
+      return this.$message.error('获取角色列表出错')
+    }
+    this.roleList = res.data
     this.assignRoleData = Object.assign({}, userData)
     this.showDialog3 = true
   }
 
   async assignRoleSubmit() {
+    console.log(this.assignRoleData)
+    if (this.roleValue === '') {
+      return this.$message.error('未选择角色 id')
+    }
     const { data: res } = await this.axios.put(
       `users/${this.assignRoleData.id}/role`,
       {
@@ -510,6 +507,7 @@ export default class Users extends Vue {
     if (res.meta.status === 200) {
       this.$message.success('分配角色成功')
       this.showDialog3 = false
+      this.roleValue = ''
       this.getUserList()
     } else {
       this.$message.error('分配角色失败 ' + res.meta.msg)
@@ -530,9 +528,6 @@ export default class Users extends Vue {
 .userListWrap {
   margin-top: 20px;
   overflow: auto;
-  .tableWrap {
-    min-width: 1000px;
-  }
   .paginationWrap {
     margin-top: 15px;
   }

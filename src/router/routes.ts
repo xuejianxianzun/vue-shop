@@ -26,11 +26,33 @@ const routes: Array<RouteConfig> = [
       name: 'rights',
       component: () => import('@/views/Rights.vue'),
       meta: {
-        title: '权限管理',
+        title: '权限列表',
         breadcrumb: [
           {
             title: '权限管理',
+            path: ''
+          },
+          {
+            title: '权限列表',
             path: '/rights'
+          }
+        ]
+      }
+    },
+    {
+      path: '/roles',
+      name: 'roles',
+      component: () => import('@/views/Roles.vue'),
+      meta: {
+        title: '角色管理',
+        breadcrumb: [
+          {
+            title: '权限管理',
+            path: ''
+          },
+          {
+            title: '角色管理',
+            path: '/roles'
           }
         ]
       }

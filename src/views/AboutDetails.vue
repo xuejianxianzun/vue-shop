@@ -1,6 +1,6 @@
 <template>
-  <div class="about">
-    {{$route.params.id}}
+  <div class="rolesWrap">
+    {{ $route.path }}
   </div>
 </template>
 
@@ -10,5 +10,7 @@ import { Component, Vue } from 'vue-property-decorator'
 @Component({
   components: {}
 })
-export default class AboutDetails extends Vue {}
+export default class Roles extends Vue {}
 </script>
+
+<style lang="less" scoped></style>

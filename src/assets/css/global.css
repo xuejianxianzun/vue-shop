@@ -1,3 +1,6 @@
 .el-card {
   box-shadow: 0 1px 1px #ccc!important;
 }
+.mainTable{
+  margin-top: 20px;
+}

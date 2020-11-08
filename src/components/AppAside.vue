@@ -112,7 +112,7 @@ export default class AppAside extends Vue {
     justify-content: center;
     align-items: center;
     i {
-      font-size: 24px;
+      font-size: 20px;
     }
   }
 }
