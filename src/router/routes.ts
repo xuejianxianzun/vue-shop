@@ -56,6 +56,24 @@ const routes: Array<RouteConfig> = [
           }
         ]
       }
+    },
+    {
+      path: '/categories',
+      name: 'categories',
+      component: () => import('@/views/GoodsCate.vue'),
+      meta: {
+        title: '商品分类',
+        breadcrumb: [
+          {
+            title: '商品管理',
+            path: ''
+          },
+          {
+            title: '商品分类',
+            path: '/categories'
+          }
+        ]
+      }
     }]
   },
   {

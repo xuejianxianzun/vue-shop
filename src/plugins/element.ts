@@ -29,7 +29,9 @@ import {
   Select,
   Option,
   Tag,
-  Tree
+  Tree,
+  Loading,
+  Cascader
 } from 'element-ui'
 
 vue.use(Button)
@@ -60,6 +62,8 @@ vue.use(Select)
 vue.use(Option)
 vue.use(Tag)
 vue.use(Tree)
+vue.use(Loading)
+vue.use(Cascader)
 
 vue.prototype.$message = Message
 vue.prototype.$messageBox = MessageBox

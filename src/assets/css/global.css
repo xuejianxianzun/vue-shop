@@ -1,6 +1,9 @@
 .el-card {
-  box-shadow: 0 1px 1px #ccc!important;
+  box-shadow: 0 1px 1px #ccc !important;
 }
-.mainTable{
+.mainTable {
   margin-top: 20px;
+}
+.paginationWrap {
+  margin-top: 15px;
 }

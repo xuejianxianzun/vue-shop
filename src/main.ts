@@ -38,6 +38,29 @@ axios.interceptors.response.use(
   }
 )
 
+const httpGet = async (url: string, params = {}) => {
+  return new Promise(async (resolve, reject) => {
+    const res = await axios.get(url, {
+      params
+    })
+    if (res.statusText !== 'OK') {
+      // 如果返回的数据里有 msg，就作为错误消息
+      let msg = ''
+      if (res.data?.meta?.msg) {
+        msg = res.data?.meta?.msg
+        console.error(msg)
+      } else {
+        msg = `Error: Get ${res.config.baseURL}`
+      }
+      return reject(msg)
+    }
+
+    resolve(res.data)
+  })
+}
+
+Vue.prototype.$httpGet = httpGet
+
 new Vue({
   router,
   store,

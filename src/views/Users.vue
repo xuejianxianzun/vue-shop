@@ -108,6 +108,7 @@
             :page-size="pagesize"
             layout="total, sizes, prev, pager, next, jumper"
             :total="usersData.total"
+            background
           >
           </el-pagination>
         </div>
@@ -528,9 +529,6 @@ export default class Users extends Vue {
 .userListWrap {
   margin-top: 20px;
   overflow: auto;
-  .paginationWrap {
-    margin-top: 15px;
-  }
 }
 .addUserDialog {
   width: 100%;
