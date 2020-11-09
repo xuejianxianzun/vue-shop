@@ -7,8 +7,6 @@
     </div>
     <el-menu
       class="el-menu-app-aside"
-      @open="handleOpen"
-      @close="handleClose"
       background-color="#343c4b"
       text-color="#fff"
       active-text-color="#409EFF"
@@ -73,14 +71,6 @@ export default class AppAside extends Vue {
   get activePath() {
     return this.$route.path.replaceAll('/', '')
   }
-
-  handleOpen() {
-    console.log('handleOpen')
-  }
-
-  handleClose() {
-    console.log('handleClose')
-  }
 }
 </script>
 
@@ -91,7 +81,7 @@ export default class AppAside extends Vue {
     width: 64px;
   }
   &.long {
-    width: 230px;
+    width: 200px;
   }
   .iconfont {
     margin-right: 10px;
