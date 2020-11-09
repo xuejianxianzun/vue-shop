@@ -7,7 +7,10 @@
       <el-container>
         <el-aside> <AppAside></AppAside> </el-aside>
         <el-main>
-          <Breadcrumb v-if="$route.path !== '/'" class="breadcrumbComponent"></Breadcrumb>
+          <Breadcrumb
+            v-if="$route.path !== '/'"
+            class="breadcrumbComponent"
+          ></Breadcrumb>
           <router-view></router-view>
         </el-main>
       </el-container>
@@ -18,7 +21,7 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
 import AppHeader from '@/components/AppHeader.vue'
-const AppAside = () => import('@/components/AppAside.vue')
+import AppAside from '@/components/AppAside.vue'
 const Breadcrumb = () => import('@/components/Breadcrumb.vue')
 
 @Component({
@@ -45,12 +48,12 @@ export default class Home extends Vue {}
       width: auto !important;
     }
     .el-main {
-      background: #EAEDF1;
+      background: #eaedf1;
       height: 100%;
     }
   }
 }
-.breadcrumbComponent{
+.breadcrumbComponent {
   margin-bottom: 15px;
 }
 </style>

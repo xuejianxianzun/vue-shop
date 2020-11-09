@@ -74,6 +74,24 @@ const routes: Array<RouteConfig> = [
           }
         ]
       }
+    },
+    {
+      path: '/params',
+      name: 'params',
+      component: () => import('@/views/GoodsParams.vue'),
+      meta: {
+        title: '分类参数',
+        breadcrumb: [
+          {
+            title: '商品管理',
+            path: ''
+          },
+          {
+            title: '分类参数',
+            path: '/params'
+          }
+        ]
+      }
     }]
   },
   {

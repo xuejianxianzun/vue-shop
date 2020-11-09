@@ -31,7 +31,10 @@ import {
   Tag,
   Tree,
   Loading,
-  Cascader
+  Cascader,
+  Alert,
+  Tabs,
+  TabPane
 } from 'element-ui'
 
 vue.use(Button)
@@ -64,6 +67,9 @@ vue.use(Tag)
 vue.use(Tree)
 vue.use(Loading)
 vue.use(Cascader)
+vue.use(Alert)
+vue.use(Tabs)
+vue.use(TabPane)
 
 vue.prototype.$message = Message
 vue.prototype.$messageBox = MessageBox
