@@ -27,7 +27,13 @@
       </div>
       <div class="userListWrap" v-if="usersData.users">
         <div class="tableWrap">
-          <el-table :data="usersData.users" border style="width: 100%" stripe>
+          <el-table
+            :data="usersData.users"
+            border
+            style="width: 100%"
+            stripe
+            class="mainTable"
+          >
             <el-table-column
               label="序号"
               type="index"
@@ -518,14 +524,6 @@ export default class Users extends Vue {
 </script>
 
 <style lang="less" scoped>
-.searchWrap {
-  .el-input {
-    margin-right: 14px;
-  }
-  .inputArea {
-    min-width: 300px;
-  }
-}
 .userListWrap {
   margin-top: 20px;
   overflow: auto;

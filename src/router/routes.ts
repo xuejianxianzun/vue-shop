@@ -92,6 +92,24 @@ const routes: Array<RouteConfig> = [
           }
         ]
       }
+    },
+    {
+      path: '/goods',
+      name: 'goods',
+      component: () => import('@/views/GoodsList.vue'),
+      meta: {
+        title: '商品列表',
+        breadcrumb: [
+          {
+            title: '商品管理',
+            path: ''
+          },
+          {
+            title: '商品列表',
+            path: '/goods'
+          }
+        ]
+      }
     }]
   },
   {

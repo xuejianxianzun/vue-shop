@@ -7,3 +7,9 @@
 .paginationWrap {
   margin-top: 15px;
 }
+.searchWrap .el-input {
+  margin-right: 14px;
+}
+.searchWrap .inputArea {
+  min-width: 300px;
+}

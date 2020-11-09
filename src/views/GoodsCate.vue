@@ -337,7 +337,7 @@ export default class Roles extends Vue {
     color: #ccc;
   }
 }
-.el-cascader{
+.el-cascader {
   width: 100%;
 }
 </style>
