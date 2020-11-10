@@ -18,7 +18,7 @@ class DateFormat {
   // https://en.wikipedia.org/wiki/Date_format_by_country
   public static format(
     date: string | number | Date,
-    format: string = 'YYYY-MM-DD',
+    format = 'YYYY-MM-DD'
   ) {
     // 生成年、月、日、时、分、秒
     const _date = new Date(date)
@@ -58,7 +58,7 @@ class DateFormat {
     'Sept',
     'Oct',
     'Nov',
-    'Dec',
+    'Dec'
   ]
 
   private static readonly Months = [
@@ -73,7 +73,7 @@ class DateFormat {
     'September',
     'October',
     'November',
-    'December',
+    'December'
   ]
 }
 
