@@ -18,13 +18,17 @@
       <el-submenu
         v-for="menu in $store.state.menuList"
         :key="menu.id"
-        :index="menu.path"
+        :index="'/' + menu.path"
       >
         <template slot="title">
           <i :class="iconList[menu.id]"></i>
           <span>{{ menu.authName }}</span>
         </template>
-        <el-menu-item v-for="m2 in menu.children" :key="m2.id" :index="m2.path">
+        <el-menu-item
+          v-for="m2 in menu.children"
+          :key="m2.id"
+          :index="'/' + m2.path"
+        >
           <i class="el-icon-menu"></i>
           <span>{{ m2.authName }}</span>
         </el-menu-item>

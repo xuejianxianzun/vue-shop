@@ -34,7 +34,12 @@ import {
   Cascader,
   Alert,
   Tabs,
-  TabPane
+  TabPane,
+  Steps,
+  Step,
+  Checkbox,
+  CheckboxGroup,
+  Upload
 } from 'element-ui'
 
 vue.use(Button)
@@ -70,6 +75,11 @@ vue.use(Cascader)
 vue.use(Alert)
 vue.use(Tabs)
 vue.use(TabPane)
+vue.use(Steps)
+vue.use(Step)
+vue.use(Checkbox)
+vue.use(CheckboxGroup)
+vue.use(Upload)
 
 vue.prototype.$message = Message
 vue.prototype.$messageBox = MessageBox

@@ -20,7 +20,7 @@
             </el-input>
           </el-col>
           <el-col :span="4"
-            ><el-button type="primary" @click="showAddGoods = true"
+            ><el-button type="primary" @click="goToAdd"
               >添加商品</el-button
             ></el-col
           >
@@ -164,6 +164,13 @@ export default class GoodsList extends Vue {
   handleCurrentChange(val: number) {
     this.query.pagenum = val
     this.getGoodsList()
+  }
+
+  // 添加商品
+  goToAdd() {
+    this.$router.push({
+      path: '/goods/add'
+    })
   }
 
   // 编辑商品

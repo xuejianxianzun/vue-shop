@@ -110,6 +110,23 @@ const routes: Array<RouteConfig> = [
           }
         ]
       }
+    }, {
+      path: '/goods/add',
+      name: 'goodsadd',
+      component: () => import('@/views/GoodsAdd.vue'),
+      meta: {
+        title: '添加商品',
+        breadcrumb: [
+          {
+            title: '商品管理',
+            path: ''
+          },
+          {
+            title: '添加商品',
+            path: '/goods/add'
+          }
+        ]
+      }
     }]
   },
   {
