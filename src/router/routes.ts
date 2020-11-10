@@ -127,6 +127,23 @@ const routes: Array<RouteConfig> = [
           }
         ]
       }
+    }, {
+      path: '/goods/edit/:id',
+      name: 'goodsedit',
+      component: () => import('@/views/GoodsAdd.vue'),
+      meta: {
+        title: '编辑商品',
+        breadcrumb: [
+          {
+            title: '商品管理',
+            path: ''
+          },
+          {
+            title: '编辑商品',
+            path: '/goods/edit/:id'
+          }
+        ]
+      }
     }]
   },
   {

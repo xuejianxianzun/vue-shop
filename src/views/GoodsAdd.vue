@@ -51,7 +51,7 @@
               <el-form-item label="商品数量" prop="goods_number">
                 <el-input
                   type="number"
-                  v-model="formData.goods_number"
+                  v-model.number="formData.goods_number"
                 ></el-input>
               </el-form-item>
               <el-form-item label="商品分类" prop="goods_cat"> </el-form-item>
@@ -125,8 +125,8 @@
                 <el-button
                   type="primary"
                   class="submitAddBtn"
-                  @click="submitAddGoods"
-                  >添加商品</el-button
+                  @click="submitData"
+                  >{{ mode === 'add' ? '添加商品' : '提交编辑' }}</el-button
                 >
               </div>
             </el-tab-pane>
@@ -212,7 +212,7 @@ export default class GoodsAdd extends Vue {
     ],
     goods_number: [
       { required: true, message: '请输入商品数量', trigger: 'blur' },
-      { min: 1, message: '商品数量不能为空', trigger: 'blur' }
+      { type: 'number', min: 1, message: '商品数量不能为空', trigger: 'blur' }
     ],
     goods_cat: [{ required: true, message: '请选择商品分类', trigger: 'blur' }]
   }
@@ -220,8 +220,60 @@ export default class GoodsAdd extends Vue {
   // 所有分类列表
   cateList = []
 
-  created() {
+  mode: 'add' | 'edit' = 'add'
+
+  chekcMode() {
+    if (
+      this.$route.path.includes('/edit/') &&
+      this.$route.params.id !== undefined
+    ) {
+      // 如果是编辑商品模式
+      this.mode = 'edit'
+      this.restoreGoodsData()
+    } else {
+      this.mode = 'add'
+    }
+  }
+
+  async restoreGoodsData() {
+    // 查询这个商品的数据
+    const res = await this.$httpGet(`goods/${this.$route.params.id}`)
+    if (res.meta.status !== 200) {
+      return this.$message.error(res.meta.msg)
+    }
+    // 转换成编辑商品的数据格式
+    const d = res.data
+
+    this.formData.goods_name = d.goods_name
+    this.formData.goods_price = d.goods_price
+    this.formData.goods_weight = d.goods_weight
+    this.formData.goods_number = parseInt(d.goods_number)
+    this.formData.goods_introduce = d.goods_introduce
+    this.formData.goods_cat = [d.cat_one_id, d.cat_two_id, d.cat_three_id]
+
+    // 恢复商品参数数据
+    const many = d.attrs.filter((data) => data.attr_sel === 'many')
+    for (const d of many) {
+      this.paramsData.push({
+        attr_id: d.attr_id,
+        attr_name: d.attr_name,
+        attr_vals: this.splitVals(d.attr_vals)
+      })
+    }
+    // 恢复商品属性数据
+    const only = d.attrs.filter((data) => data.attr_sel === 'only')
+    for (const d of only) {
+      this.attrData.push({
+        attr_id: d.attr_id,
+        attr_name: d.attr_name,
+        attr_vals: d.attr_value
+      })
+    }
+  }
+
+  async created() {
     this.getCateList()
+    this.chekcMode()
   }
 
   // 获取所有分类数据
@@ -266,17 +318,22 @@ export default class GoodsAdd extends Vue {
       }
 
       for (const d of data.data) {
-        const vals = d.attr_vals.trim() as string
-        if (vals === '') {
-          d.attr_vals = []
-        } else {
-          // 通过循环过滤掉空项
-          const temp = vals.split(',')
-          d.attr_vals = temp.filter((value) => value !== '')
-        }
+        d.attr_vals = this.splitVals(d.attr_vals)
       }
       return resolve(data.data)
     })
+  }
+
+  // 分割属性字符串为数组。去掉空值
+  splitVals(vals: string): string[] {
+    vals = vals.trim() as string
+    if (vals === '') {
+      return []
+    } else {
+      // 通过循环过滤掉空项
+      const temp = vals.split(',')
+      return temp.filter((value) => value !== '')
+    }
   }
 
   // 上传图片
@@ -306,12 +363,12 @@ export default class GoodsAdd extends Vue {
     this.showImgPreview = false
   }
 
-  // 添加商品
-  async submitAddGoods() {
-    const r = await this.$refs.addGoodsForm.validate().catch((err) => err)
-    if (!r) {
-      return this.$message.error('表单验证失败')
-    }
+  submitData() {
+    this.mode === 'add' ? this.submitAddGoods() : this.updateGoods()
+  }
+
+  // 根据 fromData 生成添加和编辑所需的数据
+  createPostData() {
     // 拷贝到一个新对象上，作为提交的数据
     const data = Object.assign({}, this.formData)
     // 把商品分类转换成字符串
@@ -336,8 +393,17 @@ export default class GoodsAdd extends Vue {
         pic: file.response.data.tmp_path
       })
     }
-    console.log(data)
+    return data
+  }
 
+  // 添加商品
+  async submitAddGoods() {
+    const r = await this.$refs.addGoodsForm.validate().catch((err) => err)
+    if (!r) {
+      return this.$message.error('表单验证失败')
+    }
+
+    const data = this.createPostData()
     const { data: res } = await this.axios.post('goods', data)
     if (res.meta.status !== 201) {
       this.$message.error(res.meta.msg)
@@ -348,7 +414,31 @@ export default class GoodsAdd extends Vue {
 
     window.setTimeout(() => {
       this.$router.push('/goods')
-    }, 1000)
+    }, 500)
+  }
+
+  // 编辑商品时更新商品
+  async updateGoods() {
+    const r = await this.$refs.addGoodsForm.validate().catch((err) => err)
+    if (!r) {
+      return this.$message.error('表单验证失败')
+    }
+
+    const data = this.createPostData()
+    const { data: res } = await this.axios.put(
+      `goods/${this.$route.params.id}`,
+      data
+    )
+    if (res.meta.status !== 200) {
+      this.$message.error(res.meta.msg)
+      return
+    }
+
+    this.$message.success('编辑商品成功')
+
+    window.setTimeout(() => {
+      this.$router.push('/goods')
+    }, 500)
   }
 }
 </script>

@@ -1,5 +1,5 @@
 <template>
-  <div class="goodsListWrap">
+  <div class="orderListWrap">
     <el-card>
       <!-- 搜索区域 -->
       <div class="searchWrap">
@@ -27,55 +27,6 @@
         </el-row>
       </div>
       <!-- 表格区域 -->
-      <div class="tableWrap">
-        <el-table
-          :data="goodsListData"
-          border
-          style="width: 100%"
-          stripe
-          class="mainTable"
-        >
-          <el-table-column
-            label="序号"
-            type="index"
-            width="70"
-          ></el-table-column>
-          <el-table-column prop="goods_name" label="商品名称"></el-table-column>
-          <el-table-column
-            prop="goods_price"
-            label="商品价格（元）"
-            width="120"
-          ></el-table-column>
-          <el-table-column
-            prop="goods_weight"
-            label="商品重量"
-            width="100"
-          ></el-table-column>
-          <el-table-column prop="add_time" label="创建时间" width="260">
-            <template slot-scope="scope">
-              {{ formatDate(scope.row.add_time) }}
-            </template>
-          </el-table-column>
-          <el-table-column label="操作" width="180">
-            <template slot-scope="scope">
-              <el-button
-                type="primary"
-                icon="el-icon-edit"
-                size="small"
-                @click.native="readyEditGoods(scope.row)"
-                >编辑</el-button
-              >
-              <el-button
-                type="danger"
-                icon="el-icon-delete"
-                size="small"
-                @click.native="confimDeleteGoods(scope.row)"
-                >删除</el-button
-              >
-            </template>
-          </el-table-column>
-        </el-table>
-      </div>
 
       <!-- 页码 -->
       <div class="paginationWrap">
@@ -99,29 +50,6 @@
 import { Component, Vue } from 'vue-property-decorator'
 import { DateFormat } from '@/utils/DateFormat'
 
-type Goods = {
-  add_time: number
-  cat_id: null | number
-  cat_one_id: null | number
-  cat_three_id: null | number
-  cat_two_id: null | number
-  goods_id: number
-  goods_name: string
-  goods_number: number
-  goods_price: number
-  goods_state: number
-  goods_weight: number
-  hot_mumber: number
-  is_promote: boolean
-  upd_time: number
-}
-
-type GoodsListData = {
-  goods: Goods[]
-  pagenum: string
-  total: number
-}
-
 @Component({
   components: {}
 })
@@ -134,15 +62,13 @@ export default class GoodsList extends Vue {
 
   total = 0
 
-  goodsListData = []
+  orderListData = []
 
   created() {
-    this.getGoodsList()
+    this.getOrderList()
   }
 
-  showAddGoods = false
-
-  async getGoodsList() {
+  async getOrderList() {
     const data = await this.$httpGet('goods', this.query)
     if (data.meta.status !== 200) {
       return this.$message.error(data.meta.msg)
@@ -175,9 +101,7 @@ export default class GoodsList extends Vue {
 
   // 编辑商品
   readyEditGoods(data: Goods) {
-    this.$router.push({
-      path: `goods/edit/${data.goods_id}`
-    })
+    console.log(data)
   }
 
   // 删除商品
