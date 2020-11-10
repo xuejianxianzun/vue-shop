@@ -58,7 +58,7 @@
 
               <div class="casWrap">
                 <el-cascader
-                  v-model="chooseCate"
+                  v-model="formData.goods_cat"
                   :options="cateList"
                   :props="{
                     expandTrigger: 'hover',
@@ -119,7 +119,17 @@
               </el-upload>
             </el-tab-pane>
             <!-- 商品内容 -->
-            <el-tab-pane label="商品内容" name="addTabs5">商品内容</el-tab-pane>
+            <el-tab-pane label="商品内容" name="addTabs5">
+              <quillEditor v-model="formData.goods_introduce"></quillEditor>
+              <div class="div">
+                <el-button
+                  type="primary"
+                  class="submitAddBtn"
+                  @click="submitAddGoods"
+                  >添加商品</el-button
+                >
+              </div>
+            </el-tab-pane>
           </el-tabs>
         </el-form>
       </div>
@@ -143,9 +153,15 @@
 <script lang="ts">
 /* eslint-disable @typescript-eslint/camelcase */
 import { Component, Vue, Watch } from 'vue-property-decorator'
+import 'quill/dist/quill.core.css'
+import 'quill/dist/quill.snow.css'
+import 'quill/dist/quill.bubble.css'
 
+import { quillEditor } from 'vue-quill-editor'
 @Component({
-  components: {}
+  components: {
+    quillEditor
+  }
 })
 export default class GoodsAdd extends Vue {
   stepNumber = 0 // 激活的步骤条
@@ -156,7 +172,7 @@ export default class GoodsAdd extends Vue {
   // 切换标签页的事件
   beforeTabsLeave() {
     // 要求必须选择了商品分类，才允许切换选项卡
-    const len = this.chooseCate.length
+    const len = this.formData.goods_cat.length
     if (len !== 3) {
       this.$message.error('请选择商品分类')
       return false
@@ -195,15 +211,14 @@ export default class GoodsAdd extends Vue {
       { required: true, message: '请输入商品名重量', trigger: 'blur' }
     ],
     goods_number: [
-      { required: true, message: '请输入商品数量', trigger: 'blur' }
+      { required: true, message: '请输入商品数量', trigger: 'blur' },
+      { min: 1, message: '商品数量不能为空', trigger: 'blur' }
     ],
     goods_cat: [{ required: true, message: '请选择商品分类', trigger: 'blur' }]
   }
 
   // 所有分类列表
   cateList = []
-
-  chooseCate = []
 
   created() {
     this.getCateList()
@@ -226,9 +241,8 @@ export default class GoodsAdd extends Vue {
   // 级联选择器变化事件
   async handleChange() {
     // 只允许选中三级分类
-    console.log(this.chooseCate)
-    if (this.chooseCate.length !== 3) {
-      return (this.chooseCate = [])
+    if (this.formData.goods_cat.length !== 3) {
+      return (this.formData.goods_cat = [])
     }
     this.paramsData = await this.getParams('many')
     this.attrData = await this.getParams('only')
@@ -237,11 +251,13 @@ export default class GoodsAdd extends Vue {
   // 获取动态参数
   async getParams(sel: 'many' | 'only') {
     return new Promise<[]>(async (resolve, reject) => {
-      if (this.chooseCate.length === 0) {
+      if (this.formData.goods_cat.length === 0) {
         return resolve([])
       }
       const data = await this.$httpGet(
-        `categories/${this.chooseCate[this.chooseCate.length - 1]}/attributes`,
+        `categories/${
+          this.formData.goods_cat[this.formData.goods_cat.length - 1]
+        }/attributes`,
         { sel }
       )
       if (data.meta.status !== 200) {
@@ -271,14 +287,10 @@ export default class GoodsAdd extends Vue {
   fileList = []
 
   uploadSuccess(response, file, fileList) {
-    console.log(file)
-    console.log(fileList)
     this.fileList = fileList
   }
 
   uploadRemove(file, fileList) {
-    console.log(file)
-    console.log(fileList)
     this.fileList = fileList
   }
 
@@ -292,6 +304,51 @@ export default class GoodsAdd extends Vue {
 
   closePrev() {
     this.showImgPreview = false
+  }
+
+  // 添加商品
+  async submitAddGoods() {
+    const r = await this.$refs.addGoodsForm.validate().catch((err) => err)
+    if (!r) {
+      return this.$message.error('表单验证失败')
+    }
+    // 拷贝到一个新对象上，作为提交的数据
+    const data = Object.assign({}, this.formData)
+    // 把商品分类转换成字符串
+    data.goods_cat = data.goods_cat.join(',')
+    // 添加动态参数
+    for (const d of this.paramsData) {
+      data.attrs.push({
+        attr_id: d.attr_id,
+        attr_value: d.attr_vals.join(',')
+      })
+    }
+    // 添加静态属性
+    for (const d of this.attrData) {
+      data.attrs.push({
+        attr_id: d.attr_id,
+        attr_value: d.attr_vals[0]
+      })
+    }
+    // 添加图片信息
+    for (const file of this.fileList) {
+      data.pics.push({
+        pic: file.response.data.tmp_path
+      })
+    }
+    console.log(data)
+
+    const { data: res } = await this.axios.post('goods', data)
+    if (res.meta.status !== 201) {
+      this.$message.error(res.meta.msg)
+      return
+    }
+
+    this.$message.success(res.meta.msg)
+
+    window.setTimeout(() => {
+      this.$router.push('/goods')
+    }, 1000)
   }
 }
 </script>
@@ -316,5 +373,8 @@ export default class GoodsAdd extends Vue {
 .prevImg {
   max-width: 100%;
   height: auto;
+}
+.submitAddBtn {
+  margin-top: 15px;
 }
 </style>

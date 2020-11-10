@@ -13,3 +13,6 @@
 .searchWrap .inputArea {
   min-width: 300px;
 }
+.ql-editor {
+  min-height: 300px;
+}
