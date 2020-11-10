@@ -144,6 +144,23 @@ const routes: Array<RouteConfig> = [
           }
         ]
       }
+    }, {
+      path: '/orders',
+      name: 'orders',
+      component: () => import('@/views/OrderList.vue'),
+      meta: {
+        title: '订单列表',
+        breadcrumb: [
+          {
+            title: '订单管理',
+            path: ''
+          },
+          {
+            title: '订单列表',
+            path: '/orders'
+          }
+        ]
+      }
     }]
   },
   {

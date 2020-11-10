@@ -260,6 +260,7 @@ export default class GoodsAdd extends Vue {
         attr_vals: this.splitVals(d.attr_vals)
       })
     }
+
     // 恢复商品属性数据
     const only = d.attrs.filter((data) => data.attr_sel === 'only')
     for (const d of only) {
@@ -267,6 +268,20 @@ export default class GoodsAdd extends Vue {
         attr_id: d.attr_id,
         attr_name: d.attr_name,
         attr_vals: d.attr_value
+      })
+    }
+
+    // 恢复图片数据
+    for (const pic of d.pics) {
+      this.fileList.push({
+        name: pic.pics_big,
+        url: pic.pics_big_url,
+        response: {
+          data: {
+            tmp_path: pic.pics_big,
+            url: pic.pics_big_url
+          }
+        }
       })
     }
   }
