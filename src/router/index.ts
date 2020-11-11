@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import routes from './routes'
+import NProgress from 'nprogress'
+import 'nprogress/nprogress.css'
 Vue.use(VueRouter)
 
 const router = new VueRouter({
@@ -10,6 +12,7 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
+  NProgress.start()
   const token = window.sessionStorage.getItem('token')
   if (to.path !== '/login' && !token) {
     next('/login')
@@ -23,6 +26,7 @@ router.beforeEach((to, from, next) => {
 })
 
 router.afterEach((to, from) => {
+  NProgress.done()
   if (to.meta.title) {
     document.title = to.meta.title
   }

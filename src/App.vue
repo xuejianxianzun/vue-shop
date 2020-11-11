@@ -8,7 +8,11 @@
 import { Component, Vue } from 'vue-property-decorator'
 
 @Component
-export default class App extends Vue {}
+export default class App extends Vue {
+  created() {
+    console.log(process.env.NODE_ENV)
+  }
+}
 </script>
 <style lang="less">
 #app {

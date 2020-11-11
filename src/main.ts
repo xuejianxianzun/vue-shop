@@ -1,6 +1,6 @@
 import Vue from 'vue'
-import App from './App.vue'
 import router from './router'
+import App from './App.vue'
 import store from './store'
 import axios from 'axios'
 import vueAxios from 'vue-axios'
@@ -9,6 +9,8 @@ import '@/assets/css/global.css'
 import './plugins/element'
 import 'element-ui/lib/theme-chalk/index.css'
 import '@/assets/fonts/iconfont.css'
+import NProgress from 'nprogress'
+import 'nprogress/nprogress.css'
 Vue.use(vueAxios, axios)
 
 axios.defaults.baseURL = process.env.VUE_APP_API_URL
@@ -16,6 +18,7 @@ Vue.config.productionTip = false
 
 axios.interceptors.request.use(
   config => {
+    NProgress.start()
     const token = window.sessionStorage.getItem('token') || store.state.token
     config.headers.Authorization = token
     return config
@@ -27,6 +30,7 @@ axios.interceptors.request.use(
 
 axios.interceptors.response.use(
   response => {
+    NProgress.done()
     // 对错误的状态码给出提示
     if (response?.data?.meta.status === 400) {
       console.error(response.config.baseURL)

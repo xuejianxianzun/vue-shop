@@ -388,7 +388,6 @@ export default class Users extends Vue {
 
   async addUser() {
     const { data: res } = await this.axios.post('users', this.addUserData)
-    console.log(res)
 
     if (res.meta.status !== 201) {
       return this.$message.error('添加用户失败 ' + res.meta.msg)
@@ -501,7 +500,6 @@ export default class Users extends Vue {
   }
 
   async assignRoleSubmit() {
-    console.log(this.assignRoleData)
     if (this.roleValue === '') {
       return this.$message.error('未选择角色 id')
     }

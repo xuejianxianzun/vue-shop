@@ -23,7 +23,7 @@
     "src/**/*.tsx",
     "src/**/*.vue",
     "tests/**/*.ts",
-    "tests/**/*.tsx"
+    "tests/**/*.tsx", "src/main-dev.js"
   ],
   "exclude": ["node_modules"],
   "types": ["@nuxt/types"]

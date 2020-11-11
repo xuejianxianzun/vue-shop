@@ -219,7 +219,6 @@ export default class GoodsList extends Vue {
     }
 
     this.$message.success('地区修改成功')
-    console.log(this.locationForm.location)
     this.showEditLocation = false
   }
 
@@ -309,7 +308,6 @@ export default class GoodsList extends Vue {
         location: ''
       }
     ]
-    console.log(this.logisticsData)
     this.showLogistics = true
   }
 
