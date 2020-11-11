@@ -1,13 +1,36 @@
 module.exports = {
   productionSourceMap: false,
 
-  configureWebpack: config => {
-    if (process.env.NODE_ENV === 'production') {
-      config.externals = {
+  chainWebpack: config => {
+    // 发布模式
+    config.when(process.env.NODE_ENV === 'production', config => {
+      // 设置入口文件
+      config.entry('app').clear().add('./src/main-prod.ts')
+
+      // 使用 externals 抽离依赖项，设置在这里的依赖项不会被打包，所以我们可以用 cdn 引入这些依赖
+      config.set(['externals', {
         vue: 'Vue',
-        'vue-router': 'VueRouter',
-        echarts: 'echarts'
-      }
-    }
+        'vue-router': 'VueRouter'
+      }])
+      // 左侧是这些依赖的包名，右侧是这些依赖在使用中的名字
+
+      // 设置 htmlWebpackPlugin 插件上的标识
+      config.plugin('html').tap(args => {
+        args[0].isProd = true
+        return args
+      })
+    })
+
+    // 开发模式
+    config.when(process.env.NODE_ENV === 'development', config => {
+      // 设置入口文件
+      config.entry('app').clear().add('./src/main-dev.ts')
+
+      // 设置 htmlWebpackPlugin 插件上的标识
+      config.plugin('html').tap(args => {
+        args[0].isProd = false
+        return args
+      })
+    })
   }
 }

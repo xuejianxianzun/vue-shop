@@ -6,6 +6,17 @@
       </el-header>
       <el-container>
         <el-aside> <AppAside></AppAside> </el-aside>
+        <div>
+          <el-checkbox-group v-model="checkList" @change="change">
+            <el-checkbox
+              v-for="(val, i) in all"
+              :key="i"
+              :label="val"
+              border
+              false-label=""
+            ></el-checkbox>
+          </el-checkbox-group>
+        </div>
         <el-main>
           <Breadcrumb
             v-if="$route.path !== '/'"
@@ -31,7 +42,14 @@ const Breadcrumb = () => import('@/components/Breadcrumb.vue')
     Breadcrumb
   }
 })
-export default class Home extends Vue {}
+export default class Home extends Vue {
+  all = [1, 2, 3, 4, 5]
+  checkList = [1, 2, 3, 4, 5]
+
+  change(val) {
+    console.log(this.all)
+  }
+}
 </script>
 
 <style lang="less" scoped>

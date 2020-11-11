@@ -235,6 +235,8 @@ export default class GoodsAdd extends Vue {
     }
   }
 
+  checkedParamData = []
+
   async restoreGoodsData() {
     // 查询这个商品的数据
     const res = await this.$httpGet(`goods/${this.$route.params.id}`)
