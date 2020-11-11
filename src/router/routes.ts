@@ -161,6 +161,23 @@ const routes: Array<RouteConfig> = [
           }
         ]
       }
+    }, {
+      path: '/reports',
+      name: 'reports',
+      component: () => import('@/views/Reports.vue'),
+      meta: {
+        title: '数据报表',
+        breadcrumb: [
+          {
+            title: '数据统计',
+            path: ''
+          },
+          {
+            title: '数据报表',
+            path: '/reports'
+          }
+        ]
+      }
     }]
   },
   {
