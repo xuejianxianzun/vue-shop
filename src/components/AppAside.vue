@@ -73,7 +73,7 @@ export default class AppAside extends Vue {
   }
 
   get activePath() {
-    return this.$route.path.replaceAll('/', '')
+    return this.$route.path
   }
 }
 </script>

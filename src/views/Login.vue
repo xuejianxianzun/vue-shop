@@ -97,6 +97,7 @@ export default class Login extends Vue {
   background: #2b4b6b;
   width: 100%;
   height: 100%;
+  max-height: 100vh;
   position: fixed;
   left: 0;
   top: 0;

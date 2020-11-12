@@ -19,4 +19,10 @@ export default class App extends Vue {
   height: 100%;
   min-width: 1300px;
 }
+@media screen and (max-width: 750px) {
+  #app {
+  height: 100%;
+  min-width: 750px;
+}
+}
 </style>

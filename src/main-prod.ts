@@ -6,12 +6,14 @@ import axios from 'axios'
 import vueAxios from 'vue-axios'
 import '@/assets/css/resize.css'
 import '@/assets/css/global.css'
+// import Element from 'element-ui'
 import './plugins/element'
 // import 'element-ui/lib/theme-chalk/index.css'
 import '@/assets/fonts/iconfont.css'
 // import NProgress from 'nprogress'
 // import 'nprogress/nprogress.css'
 Vue.use(vueAxios, axios)
+// Vue.use(Element)
 
 axios.defaults.baseURL = process.env.VUE_APP_API_URL
 Vue.config.productionTip = false
