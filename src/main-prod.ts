@@ -9,8 +9,8 @@ import '@/assets/css/global.css'
 import './plugins/element'
 import 'element-ui/lib/theme-chalk/index.css'
 import '@/assets/fonts/iconfont.css'
-import NProgress from 'nprogress'
-import 'nprogress/nprogress.css'
+// import NProgress from 'nprogress'
+// import 'nprogress/nprogress.css'
 Vue.use(vueAxios, axios)
 
 axios.defaults.baseURL = process.env.VUE_APP_API_URL

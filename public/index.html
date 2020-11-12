@@ -8,6 +8,11 @@
     <title><%= htmlWebpackPlugin.options.title %></title>
     <% if(htmlWebpackPlugin.options.isProd){ %>
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.11"></script>
+    <script src="https://unpkg.com/nprogress@0.2.0/nprogress.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/nprogress@0.2.0/nprogress.css"
+    />
     <% } %>
   </head>
   <body>
