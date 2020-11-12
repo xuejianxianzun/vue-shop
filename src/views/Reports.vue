@@ -10,14 +10,11 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
-import echarts from 'echarts'
 
 @Component({
   components: {}
 })
 export default class Reports extends Vue {
-  echarts = echarts
-
   option = {
     title: {
       text: '用户来源'
@@ -50,7 +47,7 @@ export default class Reports extends Vue {
   }
 
   async mounted() {
-    const myChart = this.echarts.init(this.$refs.echartsRef)
+    const myChart = window.echarts.init(this.$refs.echartsRef)
     // 绘制图表
     const data = await this.getReportData()
     Object.assign(this.option, data)
