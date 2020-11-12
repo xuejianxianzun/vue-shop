@@ -11,7 +11,8 @@ module.exports = {
       // 左侧是这些依赖的包名，右侧是这些依赖在使用中的名字
       config.set(['externals', {
         vue: 'Vue',
-        nprogress: 'NProgress'
+        nprogress: 'NProgress',
+        'element-ui': 'ELEMENT'
       }])
 
       // 设置 htmlWebpackPlugin 插件上的标识
