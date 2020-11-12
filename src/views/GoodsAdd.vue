@@ -74,12 +74,12 @@
             <!-- 商品参数 -->
             <el-tab-pane label="商品参数" name="addTabs2">
               <el-form-item
-                v-for="param in paramsData"
-                :key="param.attr_id"
+                v-for="(param, i) in paramsData"
+                :key="i"
                 :label="param.attr_name"
               >
                 <el-checkbox-group
-                  v-model="param.attr_vals"
+                  v-model="checkedParamData[i].attr_vals"
                   class="checkboxGroup"
                 >
                   <el-checkbox
@@ -87,7 +87,6 @@
                     :key="i"
                     :label="str"
                     border
-                    false-label=""
                   ></el-checkbox>
                 </el-checkbox-group>
               </el-form-item>
@@ -235,8 +234,6 @@ export default class GoodsAdd extends Vue {
     }
   }
 
-  checkedParamData = []
-
   async restoreGoodsData() {
     // 查询这个商品的数据
     const res = await this.$httpGet(`goods/${this.$route.params.id}`)
@@ -256,7 +253,7 @@ export default class GoodsAdd extends Vue {
     // 恢复商品参数数据
     const many = d.attrs.filter((data) => data.attr_sel === 'many')
     for (const d of many) {
-      this.paramsData.push({
+      this.checkedParamData.push({
         attr_id: d.attr_id,
         attr_name: d.attr_name,
         attr_vals: this.splitVals(d.attr_vals)
@@ -286,6 +283,7 @@ export default class GoodsAdd extends Vue {
         }
       })
     }
+    console.log(this.fileList)
   }
 
   async created() {
@@ -304,6 +302,9 @@ export default class GoodsAdd extends Vue {
 
   // 储存该分类下的动态参数，修改时也存储到这里。一个分类里可能有多个参数组，所以这里是数组结构
   paramsData = []
+  // 从 paramsData 深拷贝一份数据，放到这里，用于 checkbox 选择使用
+  checkedParamData = []
+
   // 储存该分类下的静态属性
   attrData = []
 
@@ -314,6 +315,10 @@ export default class GoodsAdd extends Vue {
       return (this.formData.goods_cat = [])
     }
     this.paramsData = await this.getParams('many')
+    this.checkedParamData = []
+    for (const data of this.paramsData) {
+      this.checkedParamData.push(Object.assign({}, data))
+    }
     this.attrData = await this.getParams('only')
   }
 
@@ -391,7 +396,7 @@ export default class GoodsAdd extends Vue {
     // 把商品分类转换成字符串
     data.goods_cat = data.goods_cat.join(',')
     // 添加动态参数
-    for (const d of this.paramsData) {
+    for (const d of this.checkedParamData) {
       data.attrs.push({
         attr_id: d.attr_id,
         attr_value: d.attr_vals.join(',')

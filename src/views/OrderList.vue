@@ -32,8 +32,9 @@
         </el-table-column>
         <el-table-column prop="order_number" label="订单编号">
         </el-table-column>
-        <el-table-column prop="order_price" label="订单价格"> </el-table-column>
-        <el-table-column label="是否付款">
+        <el-table-column prop="order_price" label="订单价格" width="120">
+        </el-table-column>
+        <el-table-column label="是否付款" width="140">
           <template slot-scope="scope1">
             <el-tag v-if="scope1.row.pay_status === '0'" type="warning"
               >未付款</el-tag
@@ -43,7 +44,7 @@
             >
           </template>
         </el-table-column>
-        <el-table-column prop="is_send" label="是否发货"> </el-table-column>
+        <el-table-column prop="is_send" label="是否发货" width="140"> </el-table-column>
         <el-table-column prop="order_number" label="下单时间" width="200">
           <template slot-scope="scope">
             {{ formatDate(scope.row.create_time) }}

@@ -1,7 +1,7 @@
 <template>
   <section class="appHeader">
     <div class="left">
-      <div class="logoImg"><img src="../assets/vue_logo.png" alt="" /></div>
+      <div class="logoImg"><img src="../assets/avatar.jpg" alt="" /></div>
       <h1 class="title">电商后台管理系统</h1>
     </div>
     <div class="right">
@@ -39,7 +39,9 @@ export default class AppHeader extends Vue {
     align-items: center;
     .logoImg {
       width: 60px;
+      border-radius: 50%;
       height: @headerHeight;
+      overflow: hidden;
       img {
         width: 100%;
         height: 100%;

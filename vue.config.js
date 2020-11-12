@@ -8,15 +8,15 @@ module.exports = {
       config.entry('app').clear().add('./src/main-prod.ts')
 
       // 使用 externals 抽离依赖项，设置在这里的依赖项不会被打包，所以我们可以用 cdn 引入这些依赖
-      config.set(['externals', {
-        vue: 'Vue',
-        'vue-router': 'VueRouter'
-      }])
       // 左侧是这些依赖的包名，右侧是这些依赖在使用中的名字
+      config.set(['externals', {
+        vue: 'Vue'
+      }])
 
       // 设置 htmlWebpackPlugin 插件上的标识
       config.plugin('html').tap(args => {
         args[0].isProd = true
+        args[0].title = '电商管理后台'
         return args
       })
     })
@@ -29,6 +29,7 @@ module.exports = {
       // 设置 htmlWebpackPlugin 插件上的标识
       config.plugin('html').tap(args => {
         args[0].isProd = false
+        args[0].title = '电商管理后台'
         return args
       })
     })
